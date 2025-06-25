@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Unlock Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: white;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  h1 {
+    color: red;
+    margin-bottom: 20px;
+  }
+  input {
+    font-size: 18px;
+    padding: 10px;
+    margin: 5px;
+    width: 320px;
+  }
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  #msg {
+    color: red;
+    margin-top: 10px;
+    min-height: 24px;
+  }
+</style>
+</head>
+<body>
+<h1>🚫 Site Locked</h1>
+<p>Enter both unlock codes to continue:</p>
+<input id="code1" type="password" placeholder="First unlock code" autofocus />
+<input id="code2" type="password" placeholder="Second unlock code" />
+<button id="unlockBtn">Unlock Site</button>
+<p id="msg"></p>
+
+<script>
+  const CODE_1 = "REBBE";
+  const CODE_2 = "IS WATCHING US";
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const originalUrl = urlParams.get('redirect') || '/';
+
+  const msg = document.getElementById("msg");
+  const code1Input = document.getElementById("code1");
+  const code2Input = document.getElementById("code2");
+  const btn = document.getElementById("unlockBtn");
+
+  btn.onclick = function() {
+    const val1 = code1Input.value.trim();
+    const val2 = code2Input.value.trim();
+
+    if(val1 === CODE_1 && val2 === CODE_2){
+      sessionStorage.setItem("unlocked", "true");
+      window.location.href = originalUrl;
+    } else {
+      msg.textContent = "❌ Incorrect unlock codes, please try again.";
+      code1Input.value = "";
+      code2Input.value = "";
+      code1Input.focus();
+    }
+  };
+
+  [code1Input, code2Input].forEach(input => {
+    input.addEventListener("keydown", e => {
+      if(e.key === "Enter") btn.click();
+    });
+  });
+</script>
+</body>
+</html>
